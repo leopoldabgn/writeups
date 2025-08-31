@@ -118,7 +118,8 @@ SMB   10.10.10.172 445 MONTEVERDE    [-] MEGABANK.LOCAL\roleary:roleary STATUS_L
 SMB   10.10.10.172 445 MONTEVERDE    [-] MEGABANK.LOCAL\smorgan:smorgan STATUS_LOGON_FAILURE
 ```
 
-### 'user$' and 'azure_uploads' smb shares : READ ACCESS
+### 'user$' and 'azure_uploads' smb shares : READ ACCESS
+
 Avec smbmap on trouve le share 'user$' et 'azure_uploads' accessibles en lecture :
 ```bash
 smbmap -H "10.10.10.172" -u SABatchJobs -p SABatchJobs
