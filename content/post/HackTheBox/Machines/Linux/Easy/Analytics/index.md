@@ -2,7 +2,7 @@
 title: HTB | Analytics
 description: Analytics is an easy difficulty Linux machine with exposed HTTP and SSH services. Enumeration of the website reveals a Metabase instance, which is vulnerable to Pre-Authentication Remote Code Execution (CVE-2023-38646), which is leveraged to gain a foothold inside a Docker container. Enumerating the Docker container we see that the environment variables set contain credentials that can be used to SSH into the host. Post-exploitation enumeration reveals that the kernel version that is running on the host is vulnerable to GameOverlay, which is leveraged to obtain root privileges.
 slug: analytics-htb
-date: 2025-08-31 00:00:00+0000
+date: 2023-12-30 00:00:00+0000
 #image: cover.png
 categories:
  - HackTheBox
