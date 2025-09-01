@@ -250,7 +250,7 @@ Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplay
 Info: Establishing connection to remote endpoint
 *Evil-WinRM* PS C:\Users\management_svc\Documents> cd ../Desktop
 *Evil-WinRM* PS C:\Users\management_svc\Desktop> cat user.txt
-423fcbeeb2f648875dd57812bd7fd084
+423f.....d084
 ```
 
 ### Shadow Credentials attack : management_svc -> ca_operator
@@ -465,5 +465,5 @@ Mode                LastWriteTime         Length Name
 
 
 *Evil-WinRM* PS C:\Users\Administrator\Desktop> cat root.txt
-dc1c0a53ddfb39006740272ba90cfb35
+dc1c.....fb35
 ```

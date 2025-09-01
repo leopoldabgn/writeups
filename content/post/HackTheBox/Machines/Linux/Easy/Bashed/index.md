@@ -102,7 +102,7 @@ www-data@bashed:/home/arrexel# ls
 user.txt
 www-data@bashed:/home/arrexel# cat user.txt
 
-aef2caa5e32fc08bfaa0982ec46c8071
+aef2.....8071
 ```
 
 ### Users
@@ -218,6 +218,6 @@ whoami
 root
 ## cat /root/root.txt
 cat /root/root.txt
-4600bb18c83173fff6f9e174913978e4
+4600.....78e4
 ```
 

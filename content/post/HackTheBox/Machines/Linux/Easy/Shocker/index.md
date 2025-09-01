@@ -66,7 +66,7 @@ PORT     STATE SERVICE REASON         VERSION
 No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
 ```
 
-### Dirsearch & gobuster
+### Dirsearch & gobuster
 Avec dirsearch, on trouve le dossier **cgi-bin** dont l'accès est "forbidden" mais il existe. 
 ```bash
  dirsearch -u http://shocker.htb                                                                
