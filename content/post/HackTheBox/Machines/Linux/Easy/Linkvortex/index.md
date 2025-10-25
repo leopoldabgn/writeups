@@ -1,6 +1,7 @@
 ---
 title: HTB | Linkvortex
 description: LinkVortex is an easy-difficulty Linux machine with various ways to leverage symbolic link files (symlinks). The initial foothold involves discovering an exposed `.git` directory that can be dumped to retrieve credentials. These credentials allow access to the Ghost content management system vulnerable to [CVE-2023-40028](https://nvd.nist.gov/vuln/detail/CVE-2023-40028). This vulnerability allows authenticated users to upload symlinks, enabling arbitrary file read within the Ghost container. The exposed credentials in the Ghost configuration file can then be leveraged to gain a shell as the user on the host system. Finally, the user can execute a script with sudo permissions that are vulnerable to a symlink race condition attack (TOCTOU). This presents an opportunity to escalate privileges by creating links to sensitive files on the system and ultimately gaining root access.
+slug: linkvortex-htb
 date: 2025-10-22 00:00:00+0000
 #image: cover.png
 categories:
