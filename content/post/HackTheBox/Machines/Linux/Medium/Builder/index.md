@@ -2,7 +2,7 @@
 title: HTB | Builder
 description: Builder is a medium-difficulty Linux machine that features a Jenkins instance. The Jenkins instance is found to be vulnerable to the CVE-2024-23897 vulnerability that allows unauthenticated users to read arbitrary files on the Jenkins controller file system. An attacker is able to extract the username and password hash of the Jenkins user jennifer. Using the credentials to login into the remote Jenkins instance, an encrypted SSH key is exploited to obtain root access on the host machine.
 slug: builder-htb
-date: 2025-10-26 00:00:00+0000
+date: 2025-10-25 00:00:00+0000
 #image: cover.png
 categories:
  - HackTheBox
