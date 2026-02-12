@@ -1,9 +1,9 @@
 # Change baseurl before deploy
 baseurl = "https://leopoldabgn.github.io/writeups"
 languageCode = "en-us"
-title = "leopoldabgn's write-ups"
+title = "sl0wguy's Blog"
 
-canonifyURLs = true
+canonifyURLs = false
 
 relativeURLs = false
 
